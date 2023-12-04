@@ -4,7 +4,6 @@ with open('input/day04.txt') as f:
     lines = [line.rstrip() for line in f]
 
 total_score = 0
-i = 0
 scratch_cards = dict()
 
 for line in lines:
