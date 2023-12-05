@@ -129,7 +129,6 @@ for this_seed in seed_list.values():
 print()
 print(f'Part 1: {lowest_location}')
 
-
 """
 Part 1
 2505903167 is too high
