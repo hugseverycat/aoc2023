@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-with open('input/test.txt') as f:
+with open('input/day05.txt') as f:
     lines = [line.rstrip() for line in f]
 
 @dataclass
