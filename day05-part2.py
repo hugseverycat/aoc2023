@@ -60,6 +60,7 @@ for this_map_set in all_maps:
                 # Add the two new seeds back to the queue
                 seed_queue.append(new_seed_2)
                 seed_queue.append(new_seed)
+                seed_transform = True
                 break  # Stop checking additional maps; these seeds go back into the queue
             elif this_seed.start < this_map.source.start and this_seed.stop > this_map.source.stop:
                 # If the seed starts below the map and ends above the map, then the seed range totally
@@ -72,6 +73,7 @@ for this_map_set in all_maps:
                 seed_queue.append(new_seed)
                 seed_queue.append(new_seed_2)
                 seed_queue.append(new_seed_3)
+                seed_transform = True
                 break  # Stop checking this seed
             elif this_seed.start in this_map.source and this_seed.stop - 1 not in this_map.source:
                 # If the seed start is inside the range and the last seed in the range (this_seed.stop-1)
@@ -82,6 +84,8 @@ for this_map_set in all_maps:
                 # Put seeds in queue
                 seed_queue.append(new_seed)
                 seed_queue.append(new_seed_2)
+                seed_transform = True
+                break
             elif this_seed.start >= this_map.source.start and this_seed.stop <= this_map.source.stop:
                 # This seed is entirely within this map range
                 # So we're going to transform it and put it in the completed_seeds list
@@ -118,5 +122,3 @@ for seed in seed_queue:
             lowest = seed.start
 
 print(lowest)
-
-# 6725362 too low
