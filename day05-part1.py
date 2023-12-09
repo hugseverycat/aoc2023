@@ -28,6 +28,7 @@ class AlmanacMap:
 
 
 input_section = 0
+lowest_location = None
 seed_list = dict()
 seed_to_soil = []
 soil_to_fert = []
@@ -110,13 +111,13 @@ for this_seed in seed_list.values():
     if this_seed.humidity is None:
         this_seed.humidity = this_seed.temperature
 
-    lowest_location = None
     for map_entry in humid_to_loc:
         if map_entry.in_range(this_seed.humidity):
             offset = this_seed.humidity - map_entry.source
             this_seed.location = map_entry.destination + offset
     if this_seed.location is None:
         this_seed.location = this_seed.humidity
+
     if lowest_location is None:
         lowest_location = this_seed.location
     if this_seed.location < lowest_location:
@@ -132,4 +133,5 @@ print(f'Part 1: {lowest_location}')
 """
 Part 1
 2505903167 is too high
+240320250 is correct
 """
