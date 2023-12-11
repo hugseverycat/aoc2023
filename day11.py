@@ -75,7 +75,7 @@ for i in range(0, len(galaxy_list) - 1):
         compare_galaxy = galaxy_list[j]
         if galaxies[compare_galaxy] is None:  # Set adjusted coordinates for this galaxy
             galaxies[compare_galaxy] = adjust_galaxy(compare_galaxy, x_adjusts, y_adjusts)
-        this_m_dist = manhattan_dist(galaxies[this_galaxy], galaxies[compare_galaxy])
-        m_dist += this_m_dist
+        # Note, we're sending the adjusted galaxy coordinates to the manhattan distance function
+        m_dist += manhattan_dist(galaxies[this_galaxy], galaxies[compare_galaxy])
 
 print(m_dist)
