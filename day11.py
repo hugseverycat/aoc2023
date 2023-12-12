@@ -22,12 +22,12 @@ def adjust_galaxy(g_coord: tuple, x_adj_list: list, y_adj_list: list):
     # or column it is beyond
     for this_x in x_adj_list:
         if gx > this_x:
-            x_adj += 999999
+            x_adj += 1
         else:
             break
     for this_y in y_adj_list:
         if gy > this_y:
-            y_adj += 999999
+            y_adj += 1
         else:
             break
     return gx + x_adj, gy + y_adj
@@ -63,19 +63,25 @@ for y, line in enumerate(lines):
 for x, _ in enumerate(lines[0]):
     if x_found[x] is not True:
         x_adjusts.append(x)
+print(x_adjusts)
+print(y_adjusts)
 
 m_dist = 0
 
 # Compare all the galaxies to all the other galaxies
+counter = 0
 for i in range(0, len(galaxy_list) - 1):
     this_galaxy = galaxy_list[i]
     if galaxies[this_galaxy] is None:  # Set adjusted coordinates for this galaxy
         galaxies[this_galaxy] = adjust_galaxy(this_galaxy, x_adjusts, y_adjusts)
     for j in range(i + 1, len(galaxy_list)):
         compare_galaxy = galaxy_list[j]
+        counter += 1
         if galaxies[compare_galaxy] is None:  # Set adjusted coordinates for this galaxy
             galaxies[compare_galaxy] = adjust_galaxy(compare_galaxy, x_adjusts, y_adjusts)
         # Note, we're sending the adjusted galaxy coordinates to the manhattan distance function
         m_dist += manhattan_dist(galaxies[this_galaxy], galaxies[compare_galaxy])
+        print((galaxies[this_galaxy], galaxies[compare_galaxy]))
 
 print(m_dist)
+print(counter)
