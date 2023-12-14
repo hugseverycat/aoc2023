@@ -23,7 +23,7 @@ grid_list.append(new_grid)
 
 
 # A recursive function that checks for symmetry
-# vert = True if checking for vertical symmetries
+# vert = True if checking for vertical symmetries, False for horizontal
 # sym_line = The line of symmetry we're checking. Should not change within the recursive function
 # sym_len = The distance from the line of symmetry
 # Basically we check points across the line of symmetry at distance sym_len and if they're
@@ -66,7 +66,7 @@ def find_symmetry(g: dict, vert: bool, sym_line: int, sym_len: int):
 
 # A recursive function that counts how many differences are along each line of symmetry
 # If there's only 1 difference, then we've found the smudge.
-# vert = True if checking vertical symmetries
+# vert = True if checking vertical symmetries, False for horizontal
 # sym_line = The line of symmetry we're checking. Should not change within the recursive function
 # sym_len = The distance from the line of symmetry
 # We compare points across the line of symmetry just like the previous function, but instead of
