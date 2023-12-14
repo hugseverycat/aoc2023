@@ -69,9 +69,10 @@ for s in spring_lines:
     m += matches
 
 print(f"Part 1: {m}")
-
+for s in saved_states:
+    print(f"{s}: {saved_states[s]}")
 m = 0
-for s in spring_lines:
+'''for s in spring_lines:
     saved_states = {}
     sline = s[0]
     sline = (sline + '?')*5
@@ -79,7 +80,7 @@ for s in spring_lines:
     sgroup = s[1]*5
     matches = find_matches(sline, sgroup, 0, 0, 0)
     m += matches
-print(f"Part 2: {m}")
+print(f"Part 2: {m}")'''
 
 
 # Correct P1: 7173

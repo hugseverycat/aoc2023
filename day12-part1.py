@@ -65,6 +65,7 @@ def get_matches(spring: SpringLines):
                 possibles.append(p2)
             elif p2_test == 'complete':
                 matches.append(p2)
+
     return matches
 
 
