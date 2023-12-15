@@ -1,14 +1,3 @@
-"""
-This code is trash
-
-Basically I suck at detecting cycles and I gave up, so I just let it ran and watched the output
-And then when I thought I had a cycle I did math to calculate the 1,000,000,000th cycle
-It turned out that my input started a loop on 198 and it lasted 28 cycles. So
-198 + (999999999 - 198) % 28 = 215. My answer was the 215th line of output.
-
-For part 1 just run the tilt_board and the get_load functions.
-"""
-
 with open('input/day14.txt') as f:
     lines = [line.rstrip() for line in f]
 
@@ -40,18 +29,15 @@ def rotate_board(cols: int, rnds: set, cbs: set):
 
 def tilt_board(cols: int, rnds: set, cbs: set):
     for cx in range(cols):
-        # print(f"Checking column {x}")
         move_rocks = set()
         move_start = 0
         for cy in range(cols):
             # We've found a round rock who could potentially move
             if (cx, cy) in rnds:
-                # print(f"Found round rock at {(x, y)}")
                 move_rocks.add((cx, cy))
             # We've found a cube rock. Collect all the round rocks and move them
             # down as far as we can go, then reset everything and adjust move_start
             elif (cx, cy) in cbs:
-                # print(f"Found cube rock at {(x, y)}. There are {len(move_rocks)} that can move down.")
                 # Remove all the moving rocks from round_rocks; we will adjust them and re-add
                 rnds = rnds.difference(move_rocks)
                 for ci, _ in enumerate(move_rocks):
@@ -61,7 +47,6 @@ def tilt_board(cols: int, rnds: set, cbs: set):
             else:
                 # I don't think I need to do anything about empty spaces...
                 pass
-        # print(f"Reached the end of this column. There are {len(move_rocks)} that can move down.")
         # Remove all the moving rocks from round_rocks; we will adjust them and re-add
         rnds = rnds.difference(move_rocks)
         for ci, _ in enumerate(move_rocks):
@@ -91,54 +76,30 @@ columns = len(lines[0])
 rows = len(lines)
 
 counter = 0
-results = set()
-cycle = []
+saved_states = dict()
+load_list = []
+repeat_state = None
 cycle_start = 0
-cycle_repeat_start = 0
-cycle_repeat_length = 0
-
-#display_board(columns, rows, round_rocks, cube_rocks)
 
 for counter in range(300):
-
+    if counter % 10 == 0:
+        print(counter)
     for t in range(4):
         round_rocks, cube_rocks = tilt_board(columns, round_rocks, cube_rocks)
         round_rocks, cube_rocks = rotate_board(columns, round_rocks, cube_rocks)
-    #display_board(columns, rows, round_rocks, cube_rocks)
 
     load = get_load(columns, round_rocks)
-    if (counter - 198) % 28 == 0 and counter > 198:
-        print(f"Cycle repeat? Current load: {load}. Cycle start = {cycle[0]}")
-    print(f"{counter}: {load}: {load in results}")
-    if load in results:
-        if len(cycle) == 0:
-            print(f"  Starting new cycle at {counter}")
+    load_list.append(load)
+    if tuple(round_rocks) in saved_states:
+        if repeat_state is None:
+            repeat_state = tuple(round_rocks)
             cycle_start = counter
-            cycle_start = 0
-            cycle_repeat_length = 0
-        else:
-            if load == cycle[cycle_repeat_length]:
-                if cycle_repeat_start == 0:
-                    print(f"  Potential cycle repeat starting at {counter}")
-                    cycle_repeat_start = counter
-                    cycle_repeat_length = 0
-                cycle_repeat_length += 1
-            else:
-                if cycle_repeat_start > 0:
-                    print(f"  Cycle repeat broken at {counter}. Resetting to 0")
-                cycle_repeat_start = 0
-                cycle_repeat_length = 0
-        cycle.append(load)
+            print(f"Cycle starting at {cycle_start}")
+        elif tuple(round_rocks) == repeat_state:
+            print(f"Cycle length is {counter - cycle_start}")
+            cycle_length = counter - cycle_start
+            final_load = cycle_start + (999999999 - cycle_start) % cycle_length
+            print(f"Part 2: {load_list[final_load]}")
+            break
     else:
-        cycle.clear()
-        cycle_start = 0
-    results.add(load)
-
-#print(cycle)
-#print(len(cycle))
-
-
-
-# Part 1: 112046
-# Part 2: 104639 (too high)
-# Part 2: 104619 (correct)
+        saved_states[tuple(round_rocks)] = load
