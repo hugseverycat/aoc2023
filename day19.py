@@ -79,9 +79,10 @@ class Workflow:
                 category = this_flow[0]  # in our example this is a
                 compare_to = int(re.findall('\d+', this_flow)[0])  # example is 2006
                 _, result = this_flow.split(':')  # result = qkq for the example
-                cat_range = pr.cat(category)  # Should get the range for the 'a' category
+                cat_range = pr.cat(category)  # For the example, gives the range for 'a' category
                 if '<' in this_flow:
                     if len(range(cat_range.start, compare_to)) > 0:  # If an overlap exists
+                        # new_range is a copy of pr
                         new_range = PartRange(pr.x, pr.m, pr.a, pr.s)
                         # Replace the category range with the range that meets the criteria
                         new_range.replace(category, range(cat_range.start, compare_to))
@@ -92,6 +93,8 @@ class Workflow:
                         pr.replace(category, range(compare_to, cat_range.stop))
                 elif '>' in this_flow:
                     if len(range(compare_to, cat_range.stop)) > 0:
+                        # This is all the same as the previous section except for greater-than
+                        # And we need to add 1 to some things because of how python ranges are
                         new_range = PartRange(pr.x, pr.m, pr.a, pr.s)
 
                         new_range.replace(category, range(compare_to + 1, cat_range.stop))
@@ -161,18 +164,22 @@ print(f"Part 1: {rating}")
 
 # Part 2
 start_range = PartRange(range(1, 4001), range(1, 4001), range(1, 4001), range(1, 4001))
-# Queue will keep track of PartRanges we need to send through more workflows
+# range_queue will keep track of PartRanges we need to send through more workflows
 # Each queue item will be a list where the first item is the workflow, and the 2nd is the PartRange
+
+# Start with the 'in' workflow and the start_range which is 1-4001 for each category
 range_queue = deque([['in', start_range]])
 while range_queue:
     test_workflow, test_range = range_queue.pop()
     range_splits = workflows[test_workflow].analyze_workflow(test_range)
     for r in range_splits:
+        # Each r should have 2 items, the workflow name or A/R, and a PartRange object
         if r[0] == 'A':
             accepted_ranges.append(r[1])
         elif r[0] == 'R':
             continue
         else:
+            # If it isn't accepted or rejected, put it in the queue to continue processing
             range_queue.append(r)
 
 total_possibilities = 0
